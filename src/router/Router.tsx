@@ -3,6 +3,7 @@ import { ROUTES } from './_Routes';
 
 import { Home, Info } from '../page';
 import { Layout } from '../components';
+import Error from '../page/Error/Error';
 
 export const router = createBrowserRouter([
   {
@@ -12,10 +13,12 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+        errorElement: <Error />,
       },
       {
         element: <Info />,
         path: ROUTES.article(),
+        errorElement: <Error />,
       },
     ],
   },

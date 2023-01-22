@@ -8,6 +8,7 @@ export type State = {
   acticle: Arcticle[];
   status: string;
   error: string;
+  filteredUsers: Arcticle[];
 };
 
 export type Arcticle = {
