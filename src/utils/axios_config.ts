@@ -1,3 +1,8 @@
+import axios from 'axios';
 const MAIN_URL = 'https://api.spaceflightnewsapi.net/v3/';
 
-export const ALL = MAIN_URL + 'articles?_limit=5';
+const instance = axios.create({
+  baseURL: MAIN_URL,
+});
+
+export default instance;

@@ -1,3 +1,5 @@
+import { IArticle } from '../../@types/IArticle';
+
 export enum Status {
   MAIN = '',
   LOADING = 'loading',
@@ -5,15 +7,9 @@ export enum Status {
 }
 
 export type State = {
-  acticle: Arcticle[];
+  acticle: IArticle[];
   status: string;
+  arcticleByID?: IArticle | undefined | null;
   error: string;
-  filteredUsers: Arcticle[];
-};
-
-export type Arcticle = {
-  id: number;
-  imageUrl: string;
-  title: string;
-  summary: string;
+  filteredUsers: IArticle[];
 };

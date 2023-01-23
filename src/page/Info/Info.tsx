@@ -1,45 +1,50 @@
 import React from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 // MUI
-import { Button, Box, Typography, Container, Card, CardContent, CardMedia } from '@mui/material';
+import { Button, Typography, Container, Card, CardContent } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // types
-import { IArticle } from '../../@types/IArticle';
+
+//page
+import Error from '../Error/Error';
 
 //redux
+
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { selectActicleData } from '../../store/article/selector';
 import { FetchByIDArticle } from '../../store/article/asyncAction';
-import { useAppDispatch } from '../../store/store';
+import { Loading } from '../../components';
 
 export const Info = () => {
   const dispatch = useAppDispatch();
   const { articleId } = useParams();
-  const [InfoData, setInfoData] = React.useState<IArticle | null>(null);
-
+  const { arcticleByID, status, error } = useAppSelector(selectActicleData);
+  const IsLoading = status === 'loading';
   React.useEffect(() => {
-    dispatch(FetchByIDArticle(articleId!))
-      .unwrap()
-      .then((res) => setInfoData(res));
+    dispatch(FetchByIDArticle(articleId!));
   }, [articleId]);
 
   return (
     <>
       <img
-        src={InfoData?.imageUrl}
+        src={arcticleByID?.imageUrl}
         style={{ width: '100%', height: '245px', objectFit: 'cover' }}
       />
       <Container maxWidth="lg">
         <Card sx={{ minWidth: 275, mt: -5, position: 'relative' }}>
+          {IsLoading ? <Loading></Loading> : <></>}
+          {error && <Error></Error>}
           <CardContent>
             <Typography
               sx={{ fontSize: 24, mb: '50px' }}
               align="center"
               color="text.secondary"
               gutterBottom>
-              {InfoData?.title}
+              {arcticleByID?.title}
             </Typography>
             <Typography variant="h5" component="div"></Typography>
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              {InfoData?.summary}
+              {arcticleByID?.summary}
             </Typography>
           </CardContent>
         </Card>

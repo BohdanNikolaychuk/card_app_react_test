@@ -1,12 +1,18 @@
 import TextField from '@mui/material/TextField';
 
-export const Search = ({ onChange, value }: any) => {
+interface SearchProps {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
+  lable: string;
+}
+
+export const Search = ({ onChange, value, lable }: SearchProps) => {
   return (
     <TextField
       onChange={onChange}
       value={value}
-      sx={{ width: '40%' }}
-      label="The most successful IT companies in 2023"
+      sx={{ width: '100%' }}
+      label={lable}
       variant="outlined"
     />
   );

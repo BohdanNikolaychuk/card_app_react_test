@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { ALL } from '../../utils/axios_config';
+import axios from '../../utils/axios_config';
+import { IArticle } from '../../@types/IArticle';
 
 export const FetchAllArticles = createAsyncThunk(
   'arctile/fetchArctile',
-  async function (_, { rejectWithValue, dispatch }) {
+  async function (_, { rejectWithValue }) {
     try {
-      const response = await axios.get(ALL);
+      const response = await axios.get('/articles');
 
       return response.data;
     } catch (err: any) {
@@ -21,9 +21,9 @@ export const FetchAllArticles = createAsyncThunk(
 
 export const FetchByIDArticle = createAsyncThunk(
   'arctile/fetchByID',
-  async function (id: string, { rejectWithValue, dispatch }) {
+  async function (id: string, { rejectWithValue }) {
     try {
-      const response = await axios.get(`https://api.spaceflightnewsapi.net/v3/articles/${id}`);
+      const response = await axios.get<IArticle>(`articles/${id}`);
       return response.data;
     } catch (err: any) {
       let error = err;

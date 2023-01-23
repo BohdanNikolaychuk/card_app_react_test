@@ -1,15 +1,21 @@
+// react router Dom
+import { NavLink } from 'react-router-dom';
+//MUI
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { NavLink } from 'react-router-dom';
-import { FormatData } from '../../helpers/FormatData';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import { Box } from '@mui/material';
-export default function MediaCard({ imageUrl, title, summary, id, publishedAt }: any) {
+import Box from '@mui/material/Box';
+
+//helper
+import { FormatData } from '../../helpers/FormatData';
+import { IArticle } from '../../@types/IArticle';
+
+export default function MediaCard({ imageUrl, title, summary, id, publishedAt }: IArticle) {
   return (
     <Card sx={{ maxWidth: 400, height: 530, mt: '30px', position: 'relative' }}>
       <CardMedia sx={{ height: 220, maxWidth: 400 }} image={imageUrl} title="green iguana" />
@@ -18,7 +24,9 @@ export default function MediaCard({ imageUrl, title, summary, id, publishedAt }:
           <CalendarTodayIcon />
           <Typography sx={{ fontSize: '14px' }}>{FormatData(publishedAt)}</Typography>
         </Box>
+
         <Typography sx={{ fontSize: '20px', mb: 1, mt: 1, lineHeight: '29px' }}>{title}</Typography>
+
         <Typography
           sx={{
             overflow: 'hidden',
