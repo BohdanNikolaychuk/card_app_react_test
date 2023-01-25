@@ -1,7 +1,7 @@
 import React from 'react';
 
 //MUI
-import { Container, Grid, Typography, Button } from '@mui/material';
+import { Container, Grid, Typography, Button, Box } from '@mui/material';
 //Component
 import { Search } from '../../components';
 import { MediaCard } from '../../components/Card/Card';
@@ -16,6 +16,9 @@ import { FetchAllArticles } from '../../store/article/asyncAction';
 import { IArticle } from '../../@types/IArticle';
 import { searchByTitleAndDisc } from '../../store/article/slice';
 
+//de
+import debounce from 'lodash.debounce';
+
 export const Home = React.memo(() => {
   const { article, status, filteredArticle, error } = useAppSelector(selectActicleData);
 
@@ -23,6 +26,7 @@ export const Home = React.memo(() => {
 
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [CurrentCount, setCurrentCount] = React.useState(0);
+
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
@@ -31,12 +35,13 @@ export const Home = React.memo(() => {
     }
   }, [dispatch]);
 
-  React.useEffect(() => {
-    dispatch(searchByTitleAndDisc(searchTerm));
-  }, [searchTerm]);
-
   const changeSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+  };
+
+  const onSubmit = (e: React.SyntheticEvent): void => {
+    e.preventDefault();
+    dispatch(searchByTitleAndDisc(searchTerm));
   };
 
   return (
@@ -46,10 +51,17 @@ export const Home = React.memo(() => {
           Filter by keywords
         </Typography>
         <Container maxWidth="xs">
-          <Search
-            onChange={changeSearchTerm}
-            value={searchTerm}
-            lable={'"The most successful article in 2023"'}></Search>
+          <form onSubmit={onSubmit}>
+            <Box sx={{ display: 'flex' }}>
+              <Search
+                onChange={changeSearchTerm}
+                value={searchTerm}
+                lable={'"The most successful article in 2023"'}></Search>
+              <Button variant="outlined" type="submit">
+                Search
+              </Button>
+            </Box>
+          </form>
         </Container>
         <Typography sx={{ mt: 1 }}>Result : {filteredArticle.length}</Typography>
         <hr />
@@ -58,7 +70,7 @@ export const Home = React.memo(() => {
         <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
           {filteredArticle.map((article: IArticle) => (
             <Grid item xs={6} sm={4} md={4} key={article.id}>
-              <MediaCard {...article}></MediaCard>
+              <MediaCard {...article} searchTerm={searchTerm}></MediaCard>
             </Grid>
           ))}
         </Grid>
