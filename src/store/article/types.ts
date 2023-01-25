@@ -7,9 +7,9 @@ export enum Status {
 }
 
 export type State = {
-  acticle: IArticle[];
+  article: IArticle[];
   status: string;
-  arcticleByID?: IArticle | undefined | null;
+
   error: string;
-  filteredUsers: IArticle[];
+  filteredArticle: IArticle[];
 };

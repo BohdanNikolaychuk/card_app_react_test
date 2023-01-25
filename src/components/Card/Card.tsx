@@ -1,3 +1,5 @@
+import React from 'react';
+
 // react router Dom
 import { NavLink } from 'react-router-dom';
 //MUI
@@ -15,17 +17,20 @@ import Box from '@mui/material/Box';
 import { FormatData } from '../../helpers/FormatData';
 import { IArticle } from '../../@types/IArticle';
 
-export default function MediaCard({ imageUrl, title, summary, id, publishedAt }: IArticle) {
+export const MediaCard = React.memo(({ imageUrl, title, summary, id, publishedAt }: IArticle) => {
   return (
     <Card sx={{ maxWidth: 400, height: 530, mt: '30px', position: 'relative' }}>
       <CardMedia sx={{ height: 220, maxWidth: 400 }} image={imageUrl} title="green iguana" />
       <CardContent>
         <Box sx={{ display: 'flex', opacity: '0.6' }}>
           <CalendarTodayIcon />
+
           <Typography sx={{ fontSize: '14px' }}>{FormatData(publishedAt)}</Typography>
         </Box>
 
-        <Typography sx={{ fontSize: '20px', mb: 1, mt: 1, lineHeight: '29px' }}>{title}</Typography>
+        <Typography variant="subtitle2" sx={{ fontSize: '20px', mb: 1, mt: 1, lineHeight: '29px' }}>
+          {title}
+        </Typography>
 
         <Typography
           sx={{
@@ -53,4 +58,4 @@ export default function MediaCard({ imageUrl, title, summary, id, publishedAt }:
       </CardActions>
     </Card>
   );
-}
+});

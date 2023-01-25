@@ -1,60 +1,68 @@
 import React from 'react';
 
 //MUI
-import { Container, Grid, Typography } from '@mui/material';
+import { Container, Grid, Typography, Button } from '@mui/material';
 //Component
 import { Search } from '../../components';
-import MediaCard from '../../components/Card/Card';
+import { MediaCard } from '../../components/Card/Card';
 import { Loading } from '../../components';
+import Error from '../Error/Error';
 //Redux
 import { selectActicleData } from '../../store/article/selector';
 import { useAppDispatch } from '../../store/store';
 import { useAppSelector } from '../../store/store';
 import { FetchAllArticles } from '../../store/article/asyncAction';
-import { searchByTitle } from '../../store/article/slice';
-import Error from '../Error/Error';
+//types
+import { IArticle } from '../../@types/IArticle';
+import { searchByTitleAndDisc } from '../../store/article/slice';
 
-export const Home = () => {
-  const { acticle, status, filteredUsers, error } = useAppSelector(selectActicleData);
-  const [searchTerm, setSearchTerm] = React.useState<string>('');
-  const dispatch = useAppDispatch();
+export const Home = React.memo(() => {
+  const { article, status, filteredArticle, error } = useAppSelector(selectActicleData);
+
   const IsLoading = status === 'loading';
+
+  const [searchTerm, setSearchTerm] = React.useState<string>('');
+  const [CurrentCount, setCurrentCount] = React.useState(0);
+  const dispatch = useAppDispatch();
+
   React.useEffect(() => {
-    if (!acticle.length) {
-      dispatch(FetchAllArticles());
+    if (!article.length) {
+      dispatch(FetchAllArticles(CurrentCount));
     }
   }, [dispatch]);
 
   React.useEffect(() => {
-    dispatch(searchByTitle(searchTerm));
-  }, [searchTerm, dispatch]);
+    dispatch(searchByTitleAndDisc(searchTerm));
+  }, [searchTerm]);
 
   const changeSearchTerm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
 
   return (
-    <Container maxWidth="lg">
-      <Typography variant="h5" sx={{ mb: 2, mt: 4 }}>
-        Filter by keywords
-      </Typography>
-      <Container maxWidth="xs">
-        <Search
-          onChange={changeSearchTerm}
-          value={searchTerm}
-          lable={'"The most successful article in 2023"'}></Search>
+    <>
+      <Container maxWidth="lg">
+        <Typography variant="h5" sx={{ mb: 2, mt: 4 }}>
+          Filter by keywords
+        </Typography>
+        <Container maxWidth="xs">
+          <Search
+            onChange={changeSearchTerm}
+            value={searchTerm}
+            lable={'"The most successful article in 2023"'}></Search>
+        </Container>
+        <Typography sx={{ mt: 1 }}>Result : {filteredArticle.length}</Typography>
+        <hr />
+        {IsLoading ? <Loading></Loading> : <></>}
+        {error && <Error></Error>}
+        <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+          {filteredArticle.map((article: IArticle) => (
+            <Grid item xs={6} sm={4} md={4} key={article.id}>
+              <MediaCard {...article}></MediaCard>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
-      <Typography sx={{ mt: 1 }}>Result : {filteredUsers.length}</Typography>
-      <hr />
-      {IsLoading ? <Loading></Loading> : <></>}
-      {error && <Error></Error>}
-      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-        {filteredUsers.map((element: any) => (
-          <Grid item xs={6} sm={4} md={4} key={element.id}>
-            <MediaCard {...element} value={searchTerm} higlight={searchTerm}></MediaCard>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
+    </>
   );
-};
+});
