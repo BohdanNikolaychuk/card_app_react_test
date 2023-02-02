@@ -5,5 +5,4 @@ export interface IArticle {
   summary: string;
   publishedAt: string;
   updatedAt: string;
-  searchTerm: string;
 }
